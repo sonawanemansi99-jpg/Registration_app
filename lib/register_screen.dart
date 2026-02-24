@@ -36,6 +36,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _image = File(pickedFile.path);
       });
     }
+
   }
 
   void registerUser() {
@@ -49,6 +50,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       );
     }
+
   }
 
   @override

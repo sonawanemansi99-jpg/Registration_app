@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:registration_page/core/widgets/gradient.dart';
 import 'package:registration_page/core/widgets/appbar.dart';
-import 'package:flutter/material.dart';
+import 'package:registration_page/download_qr_page.dart';
 
 class MainScaffold extends StatefulWidget {
   final Widget body;
@@ -41,16 +42,16 @@ class _MainScaffoldState extends State<MainScaffold> {
             body: widget.body,
           ),
 
-          // Dark background overlay
+
           if (isMenuOpen)
             GestureDetector(
               onTap: toggleMenu,
               child: Container(
-                color: Colors.black.withOpacity(0.4),
+                color: Colors.black.withOpacity(0.4), // you can ignore warning
               ),
             ),
 
-          // Side Menu
+
           AnimatedPositioned(
             duration: const Duration(milliseconds: 300),
             left: isMenuOpen ? 0 : -menuWidth,
@@ -72,10 +73,7 @@ class _MainScaffoldState extends State<MainScaffold> {
                 child: Column(
                   children: [
                     const SizedBox(height: 20),
-                    const CircleAvatar(
-                      radius: 60,
-                      backgroundColor: Colors.white,
-                    ),
+                    const CircleAvatar(radius: 60, backgroundColor: Colors.white),
                     const SizedBox(height: 10),
                     const Text(
                       "User Name",
@@ -88,40 +86,57 @@ class _MainScaffoldState extends State<MainScaffold> {
 
                     const Divider(color: Colors.white),
 
-                    menuItem(Icons.analytics_rounded, "Dashboard"),
-                    menuItem(Icons.person, "Profile"),
-                    menuItem(Icons.admin_panel_settings_outlined, "Password"),
-                    menuItem(Icons.article, "Complaints"),
-                    menuItem(Icons.all_inbox_rounded, "Complaint History"),
-                    menuItem(Icons.assignment_turned_in_rounded, "Resolved Issues"),
+                    menuItem(Icons.analytics_rounded, "Dashboard", () {
+                      Navigator.popUntil(context, (route) => route.isFirst);
+                    }),
 
-                    const Spacer(),
+                    menuItem(Icons.person, "Profile", () {}),
 
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                      ),
-                      onPressed: () {},
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: const [
-                            Icon(Icons.logout_rounded, color: Colors.white),
-                            SizedBox(width: 5),
-                            Text(
-                              "Logout",
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
+                    menuItem(Icons.admin_panel_settings_outlined, "Reset Password", () {}),
+
+                    menuItem(Icons.article, "Complaints", () {}),
+
+                    menuItem(Icons.all_inbox_rounded, "Complaint History", () {}),
+
+
+                    menuItem(Icons.qr_code, "Download QR", () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const DownloadQRPage()),
+                      );
+                    }),
+
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shadowColor: Colors.black87,
+                          elevation: 10,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          backgroundColor: Colors.red,
+                        ),
+                        onPressed: () {},
+                        child: const Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Row(
+                            children: [
+                              Icon(Icons.logout_rounded, color: Colors.white),
+                              SizedBox(width: 5),
+                              Text(
+                                "Logout",
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
+                    )
                   ],
                 ),
               ),
@@ -132,14 +147,14 @@ class _MainScaffoldState extends State<MainScaffold> {
     );
   }
 
-  Widget menuItem(IconData icon, String title) {
+  Widget menuItem(IconData icon, String title, VoidCallback onTap) {
     return ListTile(
       leading: Icon(icon, color: Colors.white),
-      title: Text(
-        title,
-        style: const TextStyle(color: Colors.white),
-      ),
-      onTap: () {},
+      title: Text(title, style: const TextStyle(color: Colors.white)),
+      onTap: () {
+        toggleMenu();
+        onTap();
+      },
     );
   }
 }

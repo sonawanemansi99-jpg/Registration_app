@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     });
 
-    // If validation passed
+
     if (_mobileError == null && _passwordError == null) {
       // Show login success message
       ScaffoldMessenger.of(context).showSnackBar(
@@ -54,7 +54,6 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
 
-      // Navigate to Dashboard
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
