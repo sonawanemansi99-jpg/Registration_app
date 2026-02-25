@@ -28,6 +28,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   File? _image;
   final ImagePicker _picker = ImagePicker();
 
+  bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
+
   Future<void> pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
@@ -38,8 +41,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  void registerUser() {
-    if (_formKey.currentState!.validate()) {
+  void registerUser()
+  {
+    if (_formKey.currentState!.validate())
+    {
       String mobile = mobileController.text.trim();
 
       Navigator.push(
@@ -52,7 +57,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF0F5272),
@@ -112,14 +118,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(height: 25),
 
                     buildTextField(nameController, "Name", icon: Icons.person),
-
                     buildTextField(
                       mobileController,
                       "Mobile No",
                       keyboardType: TextInputType.phone,
                       icon: Icons.phone,
                     ),
-
                     buildTextField(
                       emailController,
                       "Gmail",
@@ -130,15 +134,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 15),
                       child: Autocomplete<String>(
-                        optionsBuilder: (TextEditingValue value) {
+                        optionsBuilder: (TextEditingValue value)
+                        {
                           if (value.text.isEmpty) return locations;
                           return locations.where((loc) =>
                               loc.toUpperCase().contains(value.text.toUpperCase()));
                         },
-                        onSelected: (value) {
+                        onSelected: (value)
+                        {
                           locationController.text = value;
                         },
-                        fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
+                        fieldViewBuilder: (context, controller, focusNode, onEditingComplete)
+                        {
                           controller.text = locationController.text;
                           return TextFormField(
                             controller: controller,
@@ -169,17 +176,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             selectedRole = value;
                           });
                         },
-                        validator: (value) {
+                        validator: (value)
+                        {
                           if (value == null) return "Please select Role";
                           return null;
                         },
                       ),
                     ),
 
-                    buildTextField(passwordController, "Password", obscureText: true, icon: Icons.lock),
+                    buildPasswordField(
+                      passwordController,
+                      "Password",
+                      Icons.lock,
+                      _isPasswordVisible,
+                          ()
+                      {
+                        setState(()
+                        {
+                          _isPasswordVisible = !_isPasswordVisible;
+                        });
+                      },
+                    ),
 
-                    buildTextField(confirmPasswordController, "Confirm Password",
-                        obscureText: true, icon: Icons.lock_outline),
+                    buildPasswordField(
+                      confirmPasswordController,
+                      "Confirm Password",
+                      Icons.lock_outline,
+                      _isConfirmPasswordVisible,
+                          ()
+                      {
+                        setState(()
+                        {
+                          _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                        });
+                      },
+                    ),
 
                     const SizedBox(height: 25),
 
@@ -213,11 +244,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget buildTextField(
       TextEditingController controller,
-      String label, {
+      String label,
+      {
         bool obscureText = false,
         TextInputType keyboardType = TextInputType.text,
         required IconData icon,
-      }) {
+      })
+  {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: TextFormField(
@@ -226,9 +259,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         keyboardType: keyboardType,
         validator: (value) {
           if (value == null || value.isEmpty) return "Please enter $label";
-          if (label == "Confirm Password" && value != passwordController.text) {
-            return "Passwords do not match";
-          }
           return null;
         },
         decoration: inputDecoration(label, icon),
@@ -236,8 +266,78 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  // 🔥 FIXED HERE (No Floating Label)
-  InputDecoration inputDecoration(String label, IconData icon) {
+  Widget buildPasswordField(
+      TextEditingController controller,
+      String label,
+      IconData icon,
+      bool isVisible,
+      VoidCallback toggleVisibility,
+      )
+  {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15),
+      child: TextFormField(
+        controller: controller,
+        obscureText: !isVisible,
+        validator: (value)
+        {
+          if (value == null || value.isEmpty) return "Please enter $label";
+
+          if (label == "Password")
+          {
+            if (value.length < 8)
+            {
+              return "Password must be at least 8 characters long";
+            }
+            if (!RegExp(r'[A-Za-z]').hasMatch(value))
+            {
+              return "Password must include at least one letter";
+            }
+            if (!RegExp(r'[0-9]').hasMatch(value))
+            {
+              return "Password must include at least one number";
+            }
+            if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value))
+            {
+              return "Password must include a special symbol";
+            }
+          }
+
+          if (label == "Confirm Password" &&
+              value != passwordController.text)
+          {
+            return "Passwords do not match";
+          }
+
+          return null;
+        },
+        decoration: InputDecoration(
+          prefixIcon: Icon(icon, color: const Color(0xFF0F5272)),
+          hintText: label,
+          hintStyle: const TextStyle(
+            color: Color(0xFF3C3C3C),
+            fontWeight: FontWeight.w500,
+          ),
+          suffixIcon: IconButton(
+            icon: Icon(
+              isVisible ? Icons.visibility : Icons.visibility_off,
+              color: const Color(0xFF0F5272),
+            ),
+            onPressed: toggleVisibility,
+          ),
+          filled: true,
+          fillColor: const Color(0xFFEFEFEF),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide.none,
+          ),
+        ),
+      ),
+    );
+  }
+
+  InputDecoration inputDecoration(String label, IconData icon)
+  {
     return InputDecoration(
       prefixIcon: Icon(icon, color: const Color(0xFF0F5272)),
       hintText: label,
