@@ -47,7 +47,7 @@ class _MainScaffoldState extends State<MainScaffold> {
             GestureDetector(
               onTap: toggleMenu,
               child: Container(
-                color: Colors.black.withOpacity(0.4), // you can ignore warning
+                color: Colors.black.withOpacity(0.4),
               ),
             ),
 

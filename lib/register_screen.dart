@@ -36,7 +36,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _image = File(pickedFile.path);
       });
     }
-
   }
 
   void registerUser() {
@@ -50,7 +49,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       );
     }
-
   }
 
   @override
@@ -65,6 +63,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Stack(
         children: [
@@ -111,25 +110,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                     const SizedBox(height: 25),
+
                     buildTextField(nameController, "Name", icon: Icons.person),
+
                     buildTextField(
                       mobileController,
                       "Mobile No",
                       keyboardType: TextInputType.phone,
                       icon: Icons.phone,
                     ),
+
                     buildTextField(
                       emailController,
                       "Gmail",
                       keyboardType: TextInputType.emailAddress,
                       icon: Icons.email,
                     ),
+
                     Padding(
                       padding: const EdgeInsets.only(bottom: 15),
                       child: Autocomplete<String>(
                         optionsBuilder: (TextEditingValue value) {
                           if (value.text.isEmpty) return locations;
-                          return locations.where((loc) => loc.toUpperCase().contains(value.text.toUpperCase()));
+                          return locations.where((loc) =>
+                              loc.toUpperCase().contains(value.text.toUpperCase()));
                         },
                         onSelected: (value) {
                           locationController.text = value;
@@ -151,6 +155,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
                     ),
+
                     Padding(
                       padding: const EdgeInsets.only(bottom: 15),
                       child: DropdownButtonFormField<String>(
@@ -170,9 +175,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
                     ),
+
                     buildTextField(passwordController, "Password", obscureText: true, icon: Icons.lock),
-                    buildTextField(confirmPasswordController, "Confirm Password", obscureText: true, icon: Icons.lock_outline),
+
+                    buildTextField(confirmPasswordController, "Confirm Password",
+                        obscureText: true, icon: Icons.lock_outline),
+
                     const SizedBox(height: 25),
+
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFBE0108),
@@ -184,7 +194,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onPressed: registerUser,
                       child: const Text(
                         "Register",
-                        style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
@@ -222,10 +236,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+  // 🔥 FIXED HERE (No Floating Label)
   InputDecoration inputDecoration(String label, IconData icon) {
     return InputDecoration(
       prefixIcon: Icon(icon, color: const Color(0xFF0F5272)),
-      labelText: label,
+      hintText: label,
+      hintStyle: const TextStyle(
+        color: Color(0xFF3C3C3C),
+        fontWeight: FontWeight.w500,
+      ),
       filled: true,
       fillColor: const Color(0xFFEFEFEF),
       border: OutlineInputBorder(

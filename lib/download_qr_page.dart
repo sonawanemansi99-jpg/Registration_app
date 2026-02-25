@@ -16,6 +16,9 @@ class DownloadQRPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF0F5272),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
         title: const Text(
           "Download QR",
           style: TextStyle(color: Colors.white),
@@ -37,10 +40,9 @@ class DownloadQRPage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF0F5272), // 🔵 YOUR COLOR
+                backgroundColor: const Color(0xFF0F5272),
                 padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login_page.dart';
 
-
 class OtpScreen extends StatefulWidget {
   final String mobileNumber;
 
@@ -35,7 +34,7 @@ class _OtpScreenState extends State<OtpScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) =>  LoginPage(),
+          builder: (context) => const LoginPage(),
         ),
       );
     }
@@ -45,8 +44,17 @@ class _OtpScreenState extends State<OtpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Verify OTP"),
+        title: const Text(
+          "Verify OTP",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         backgroundColor: const Color(0xFF0F5272),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -56,7 +64,10 @@ class _OtpScreenState extends State<OtpScreen> {
 
             Text(
               "OTP sent to ${widget.mobileNumber}",
-              style: const TextStyle(fontSize: 16),
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+              ),
             ),
 
             const SizedBox(height: 20),
@@ -79,7 +90,13 @@ class _OtpScreenState extends State<OtpScreen> {
                   backgroundColor: const Color(0xFFBE0108),
                 ),
                 onPressed: verifyOtp,
-                child: const Text("Verify"),
+                child: const Text(
+                  "Verify",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           ],
